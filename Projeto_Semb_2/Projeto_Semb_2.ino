@@ -24,7 +24,7 @@ long previousMillis = 0;
 
 //Time interval to next check
 long delayTimeWatering = 5000;
-long lampCheckInterval = 5000;
+long lampCheckInterval = 10000;
 long umidCheckInterval = 10000 + delayTimeWatering;
 
 void setup() {
@@ -38,32 +38,40 @@ void setup() {
 
 void loop() {
   delay(500);
-  //measureTemp();
-  measureLum();
-  //measureUmid();
+  digitalWrite(pinWater, HIGH);
+//  measureTemp();
+//  measureLum();
+//  measureUmid();
 }
 
 void measureTemp() {
   tempSensorValue = analogRead(pinTempSensor);  
-    
-  if (tempSensorValue > fixInput ) { 
-        i = tempSensorValue - fixInput;
-        i = i /fixedDegreeValue; 
-        Serial.print("Temperature = ");
-        fixtemp = fixtemp - i;
-        Serial.print(fixtemp);
-        Serial.println(" C");
-  } else if(tempSensorValue < fixInput) {
-        i =  fixInput - tempSensorValue;
-        i = i /fixedDegreeValue; 
-        Serial.print("Temperature = ");
-        fixtemp = fixtemp + i;
-        Serial.print(fixtemp);
-        Serial.println(" C");
-  } else if(tempSensorValue == fixInput ) {  
-        Serial.println(" temperature  = 20 C");
-    
-  }
+
+  int conta = (tempSensorValue*34)/400;
+  int contaDois = conta - 34;
+  int contaTres = 34 - contaDois;
+  
+  
+  Serial.println(tempSensorValue);
+  Serial.println(contaTres);
+//  if (tempSensorValue > fixInput ) { 
+//        i = tempSensorValue - fixInput;
+//        i = i /fixedDegreeValue; 
+//        Serial.print("Temperature = ");
+//        fixtemp = fixtemp - i;
+//        Serial.print(fixtemp);
+//        Serial.println(" C");
+//  } else if(tempSensorValue < fixInput) {
+//        i =  fixInput - tempSensorValue;
+//        i = i /fixedDegreeValue; 
+//        Serial.print("Temperature = ");
+//        fixtemp = fixtemp + i;
+//        Serial.print(fixtemp);
+//        Serial.println(" C");
+//  } else if(tempSensorValue == fixInput ) {  
+//        Serial.println(" temperature  = 20 C");
+//    
+//  }
 
   //Add resistor to control temperature
   /*
