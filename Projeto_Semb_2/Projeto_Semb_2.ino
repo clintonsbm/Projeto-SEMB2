@@ -12,9 +12,8 @@ int fixInput = 560;
 float fixedDegreeValue = 4.48;
 
 //Luminosity sensor setup
-int ledPin = 7; //Led no pino 7
-int ldrPin = 2; //LDR no pino analígico 8
-int ldrValor = 0; //Valor lido do LDR
+int ldrPin = 2; 
+int ldrValor = 0; 
 
 //Umid sensor setup
 int pinUmidSensor = A0;
@@ -25,14 +24,13 @@ long previousMillis = 0;
 
 //Time interval to next check
 long delayTimeWatering = 5000;
-long lampCheckInterval = 30000;
+long lampCheckInterval = 5000;
 long umidCheckInterval = 10000 + delayTimeWatering;
 
 void setup() {
   // put your setup code here, to run once:
   pinMode(pinLamp, OUTPUT);
   pinMode(pinWater, OUTPUT);
-
   pinMode(pinUmidSensor, INPUT);
 
   Serial.begin (9600);
@@ -40,9 +38,9 @@ void setup() {
 
 void loop() {
   delay(500);
-  measureTemp();
+  //measureTemp();
   measureLum();
-  measureUmid();
+  //measureUmid();
 }
 
 void measureTemp() {
@@ -84,7 +82,7 @@ void measureLum() {
   
   if (currentMillis - previousMillis > lampCheckInterval) { 
     previousMillis = currentMillis;    // Salva o tempo atual
-
+    Serial.println(ldrValor);
     digitalWrite(pinLamp, LOW);
     delay(500);
     ldrValor = analogRead(ldrPin); //O valor lido será entre 0 e 1023
@@ -95,7 +93,6 @@ void measureLum() {
     } else {
       digitalWrite(pinLamp, LOW);
     }
-    Serial.println(ldrValor);
   }
 }
 
