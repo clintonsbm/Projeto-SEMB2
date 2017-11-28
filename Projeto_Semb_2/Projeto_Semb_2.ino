@@ -23,7 +23,7 @@ int umidSensorValue = 0;
 long previousMillis = 0;
 
 //Time interval to next check
-long delayTimeWatering = 5000;
+long delayTimeWatering = 1000;
 long lampCheckInterval = 10000;
 long umidCheckInterval = 10000 + delayTimeWatering;
 
@@ -38,10 +38,9 @@ void setup() {
 
 void loop() {
   delay(500);
-  digitalWrite(pinWater, HIGH);
-//  measureTemp();
-//  measureLum();
-//  measureUmid();
+  measureTemp();
+  measureLum();
+  measureUmid();
 }
 
 void measureTemp() {
@@ -52,7 +51,8 @@ void measureTemp() {
   int contaTres = 34 - contaDois;
   
   
-  Serial.println(tempSensorValue);
+//  Serial.println(tempSensorValue);
+  Serial.print("Temperatura: ");
   Serial.println(contaTres);
 //  if (tempSensorValue > fixInput ) { 
 //        i = tempSensorValue - fixInput;
@@ -90,15 +90,17 @@ void measureLum() {
   
   if (currentMillis - previousMillis > lampCheckInterval) { 
     previousMillis = currentMillis;    // Salva o tempo atual
-    Serial.println(ldrValor);
+//    Serial.println(ldrValor);
     digitalWrite(pinLamp, LOW);
     delay(500);
     ldrValor = analogRead(ldrPin); //O valor lido será entre 0 e 1023
   
     //imprime o valor lido do LDR no monitor serial
     if(ldrValor > 1000) {
+      Serial.println("Liga a luz");
       digitalWrite(pinLamp, HIGH);
     } else {
+      Serial.println("Desliga a luz");
       digitalWrite(pinLamp, LOW);
     }
   }
@@ -110,17 +112,25 @@ void measureUmid() {
   if (currentMillis - previousMillis > umidCheckInterval) { 
     previousMillis = currentMillis;    // Salva o tempo atual
     
-    Serial.println(umidSensorValue);
-    
     umidSensorValue = analogRead(pinUmidSensor);
 
-    if (umidSensorValue > 800) {
+    while(umidSensorValue > 800) {
       digitalWrite(pinWater, HIGH);
       delay(delayTimeWatering);
       digitalWrite(pinWater, LOW);
-    } else {
-      delay(delayTimeWatering);
-    }
+
+      umidSensorValue = analogRead(pinUmidSensor);
+      Serial.print("Valor do sensor de umidade: ");
+      Serial.println(umidSensorValue);
+    };
+    Serial.println("Desliga o motor");
+//    if (umidSensorValue > 800) {
+//      digitalWrite(pinWater, HIGH);
+//      delay(delayTimeWatering);
+//      digitalWrite(pinWater, LOW);
+//    } else {
+//      delay(delayTimeWatering);
+//    }
   }
 }
 
