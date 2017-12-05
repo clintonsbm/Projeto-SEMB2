@@ -21,11 +21,12 @@ int umidSensorValue = 0;
 
 //Time control
 long previousMillis = 0;
+long previousMillisW = 0;
 
 //Time interval to next check
 long delayTimeWatering = 1000;
-long lampCheckInterval = 10000;
-long umidCheckInterval = 10000 + delayTimeWatering;
+long lampCheckInterval = 5000;
+long umidCheckInterval = 8000 + delayTimeWatering;
 
 void setup() {
   // put your setup code here, to run once:
@@ -108,13 +109,17 @@ void measureLum() {
 
 void measureUmid() {
   unsigned long currentMillis = millis();
+
   
-  if (currentMillis - previousMillis > umidCheckInterval) { 
-    previousMillis = currentMillis;    // Salva o tempo atual
+  if (currentMillis - previousMillisW > umidCheckInterval) { 
+    previousMillisW = currentMillis;    // Salva o tempo atual
     
     umidSensorValue = analogRead(pinUmidSensor);
 
-    while(umidSensorValue > 800) {
+    Serial.print("Valor do sensor de umidade: ");
+    Serial.println(umidSensorValue);
+    
+    while(umidSensorValue < 800) {
       digitalWrite(pinWater, HIGH);
       delay(delayTimeWatering);
       digitalWrite(pinWater, LOW);
